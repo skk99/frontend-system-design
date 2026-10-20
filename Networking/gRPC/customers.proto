@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+// Define the main service with all supported operations
+service CustomerService {
+    // Get all customers - takes empty request, returns list of customers
+    rpc GetAll (Empty) returns (CustomerList) {}
+    // Get single customer by ID
+    rpc Get (CustomerRequestId) returns (Customer) {}
+    // Insert new customer
+    rpc Insert (Customer) returns (Customer) {}
+    // Update existing customer
+    rpc Update (Customer) returns (Customer) {}
+    // Remove customer by ID
+    rpc Remove (CustomerRequestId) returns (Empty) {}
+}
+
+// Empty message type for requests/responses that don't need parameters
+message Empty {}
+
+// Message type for customer ID requests
+message CustomerRequestId {
+    string id = 1;  // 1 is the field identifier
+}
+
+// Message type for list of customers
+message CustomerList {
+    repeated Customer customers = 1;  // repeated indicates an array/list
+}
+
+// Customer entity definition
+message Customer {
+    string id = 1;
+    string name = 2;
+    int32 age = 3;
+    string address = 4;
+}

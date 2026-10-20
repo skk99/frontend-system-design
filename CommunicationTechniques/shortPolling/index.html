@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Short Polling Example</title>
+  </head>
+  <body>
+    <h1>Short Polling Example</h1>
+    <!-- Container where polled data will be displayed -->
+    <div id="data-container"></div>
+
+    <script>
+      // fetch current data from the server polling endpoint
+      async function getData() {
+        try {
+          // Call the server's /getData endpoint
+          const response = await fetch("/getData");
+          const result = await response.json();
+          // Update the UI with the latest value returned by the server
+          document.getElementById("data-container").innerHTML = result.data;
+        } catch (e) {
+          // Simple error logging; handle errors more gracefully in production
+          console.log(e);
+        }
+      }
+
+      let intervalId;
+      function shortPolling() {
+        // setInterval repeatedly calls getData every 5000ms (5 seconds)
+        // This demonstrates short polling: repeated short-lived HTTP requests.
+        intervalId = setInterval(() => {
+          getData();
+        }, 5000);
+      }
+
+      // Start short polling immediately when the page loads
+      shortPolling();
+
+      // Example: if user navigates away or we want to stop polling, call:
+      // clearInterval(intervalId);
+      // This stops the repeated network requests and frees resources.
+    </script>
+  </body>
+</html>

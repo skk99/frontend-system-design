@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Data Theft via JavaScript</title>
+    <script>
+      // Set a sensitive cookie in the parent window
+      // In a real scenario, this could be a session token or user data
+      function setCookie(name, value, days) {
+        var expires = "";
+
+        if (days) {
+          var date = new Date();
+          date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+          expires = "; expires=" + date.toUTCString();
+        }
+
+        document.cookie = name + "=" + value + expires + "; path=/";
+      }
+
+      // SENSITIVE DATA: Setting a parent window cookie that could be stolen
+      setCookie("parentCookie", "secret", 1);
+    </script>
+  </head>
+  <body>
+    <h1>Data Theft via JavaScript</h1>
+
+    <!-- VULNERABILITY: Iframe with permissive sandbox attributes -->
+    <!-- allow-same-origin: Allows the iframe to access cookies and storage from the parent domain -->
+    <!-- allow-scripts: Allows JavaScript execution in the iframe -->
+    <!-- allow-modals: Allows the iframe to display alert/confirm dialogs -->
+    <!-- The malicious iframe from server2 will attempt to access parent data -->
+    <iframe
+      src="http://localhost:5011/iframe-website2"
+      sandbox="allow-same-origin allow-scripts allow-modals"
+    ></iframe>
+  </body>
+</html>

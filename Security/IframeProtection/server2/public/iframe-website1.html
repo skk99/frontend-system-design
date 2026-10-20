@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Clickjacking IFrame</title>
+  </head>
+  <body>
+    <h1>Child Iframe</h1>
+    <p>
+      Iframe: Click the button below to see a simple clickjacking demonstration.
+    </p>
+
+    <!-- Critical button that could be targeted by clickjacking attacks -->
+    <button
+      style="background-color: red"
+      onclick="alert('clicked iframe button')"
+    >
+      Pay Now
+    </button>
+
+    <script>
+      /* DEFENSE MECHANISM: Frame-busting code */
+      /* This script prevents the page from being embedded in an iframe by a malicious site */
+      /* if (top != self) means: if the page is currently inside an iframe */
+      /* top.location = self.location redirects the top-level window to the iframe's URL, breaking out of the frame */
+      if (top != self) {
+        top.location = self.location;
+      }
+    </script>
+  </body>
+</html>

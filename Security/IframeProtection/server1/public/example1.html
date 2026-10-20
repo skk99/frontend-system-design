@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Clickjacking Example</title>
+  </head>
+  <body>
+    <h1>Clickjacking Example</h1>
+    <p>Click the button below to see a simple clickjacking demonstration.</p>
+
+    <!-- VULNERABILITY: This iframe is embedded without sandbox restrictions or frame-ancestors CSP header -->
+    <!-- The iframe is positioned absolutely with opacity: 0 to make it invisible while overlaying the button below -->
+    <!-- When user clicks the visible button, they're actually clicking the button inside the iframe -->
+    <iframe
+      src="http://localhost:5011/iframe-website1"
+      id="legit-iframe"
+    ></iframe>
+
+    <!-- Visible button that the user intends to click -->
+    <button id="overlay-button">Click Me!</button>
+
+    <style>
+      /* ATTACK TECHNIQUE: Clickjacking via CSS overlay */
+      #legit-iframe {
+        background-color: #ccc;
+        opacity: 0; /* Make iframe invisible */
+        position: absolute; /* Position over other elements */
+        top: 0px;
+        left: 0;
+        width: 100%; /* Cover entire viewport */
+        height: 100%;
+        z-index: 1; /* Place above the button (z-index: 0) */
+      }
+    </style>
+
+    <script>
+      // This event listener would execute if the user clicks on the visible button area
+      // However, due to the overlaid iframe, clicks are intercepted by the iframe instead
+      document
+        .getElementById("overlay-button")
+        .addEventListener("click", () => {
+          alert("Button clicked!");
+        });
+    </script>
+  </body>
+</html>
