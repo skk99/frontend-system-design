@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Long Polling Example</title>
+  </head>
+  <body>
+    <h1>Long Polling Example</h1>
+    <!-- Container where polled data will be displayed -->
+    <div id="data-container"></div>
+
+    <script>
+      // Function to request data from the server using long polling.
+      // lastData is the last value received from the server.
+      async function getData(lastData) {
+        try {
+          // Call the server's /getData endpoint, passing lastData as a query param.
+          // Server will respond immediately if new data is available, or hold the connection until data changes.
+          const response = await fetch(`/getData?lastData=${lastData}`);
+          const result = await response.json();
+          // Update the UI with the latest value returned by the server.
+          document.getElementById("data-container").innerHTML = result.data;
+          // Immediately start another long poll with the new data value.
+          getData(result.data);
+        } catch (e) {
+          // Simple error logging; handle errors more gracefully in production.
+          console.log(e);
+          // Handle error scenario with a timeout or retry logic if needed.
+        }
+      }
+      // Start long polling immediately when the page loads.
+      getData();
+    </script>
+  </body>
+</html>

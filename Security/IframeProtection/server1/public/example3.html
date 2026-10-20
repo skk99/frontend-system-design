@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Clickjacking Example</title>
+  </head>
+  <body>
+    <h1>Render google in iframe</h1>
+    <p>Click the button below to see a simple clickjacking demonstration.</p>
+
+    <!-- VULNERABILITY: Embedding an external website (Google) without restrictions -->
+    <!-- This demonstrates the risks of embedding untrusted third-party content -->
+    <!-- Google's X-Frame-Options header may block this, but other sites might not -->
+    <iframe src="http://google.co.in"></iframe>
+
+    <script>
+      // This attempts to add a click listener, but the element doesn't exist on the page
+      // This is a demonstration of incomplete/broken security implementation
+      document
+        .getElementById("overlay-button")
+        .addEventListener("click", () => {
+          alert("Button clicked!");
+        });
+    </script>
+  </body>
+</html>

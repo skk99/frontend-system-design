@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Malicious iframe</title>
+  </head>
+  <body>
+    <h1>Malicious iframe</h1>
+    <p>This iframe attempts to steal data from the parent window.</p>
+
+    <script>
+      /* ATTACK ATTEMPT: Data theft from parent window */
+      window.alert("Hi");
+
+      // Malicious JavaScript code in the iframe
+      window.onload = function () {
+        try {
+          /* Attempt to access the parent window's document object */
+          /* This would only succeed if the iframe has allow-same-origin permission */
+          const parentWindow = window.parent;
+          const parentDocument = parentWindow.document;
+
+          /* ATTEMPTED THEFT: Reading parent window's HTML content */
+          /* In a real attack, this could be used to steal sensitive information like forms, tokens, or user data */
+          const stolenData = parentDocument.innerHtml;
+          alert("Stolen Data: " + stolenData);
+        } catch (error) {
+          /* If cross-origin restrictions are in place, this error will be caught */
+          /* The error indicates the iframe's attack was unsuccessful */
+          console.error("Data theft failed:", error);
+        }
+      };
+    </script>
+  </body>
+</html>
